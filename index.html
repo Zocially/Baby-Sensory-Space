@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Baby Sensory Learning Hub - Gentle Space</title>
+    <!-- Outfit & Quicksand fonts for toddler friendly UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body class="theme-warm-sand menu-page">
+    <!-- Interactive Background Canvas -->
+    <canvas id="playCanvas"></canvas>
+    
+    <!-- Floating background decorative blobs -->
+    <div class="decorative-blob blob-1"></div>
+    <div class="decorative-blob blob-2"></div>
+    <div class="decorative-blob blob-3"></div>
+
+    <!-- Main Navigation/Menu Container -->
+    <div class="menu-container">
+        <header class="menu-header">
+            <h1 class="logo-text">🌟 Sensory Space</h1>
+            <p class="menu-subtitle">Gentle, low-stimulation activities for babies & toddlers</p>
+        </header>
+
+        <main class="activity-grid">
+            <a href="play.html" class="activity-card play-card">
+                <div class="card-icon">✨</div>
+                <div class="card-body">
+                    <h2>Sensory Free Play</h2>
+                    <p>Tap the screen or type to hear sweet synthesized chords and watch soft shapes drift by.</p>
+                </div>
+                <div class="card-tag">Sensory Play</div>
+            </a>
+
+            <a href="alphabets.html" class="activity-card alpha-card">
+                <div class="card-icon">🐻</div>
+                <div class="card-body">
+                    <h2>Alphabet Safari</h2>
+                    <p>Learn letters A to Z. Tap a letter to see cute animals, hear pronunciations, and play music.</p>
+                </div>
+                <div class="card-tag">Learn A-Z</div>
+            </a>
+
+            <a href="numbers.html" class="activity-card numbers-card">
+                <div class="card-icon">🎈</div>
+                <div class="card-body">
+                    <h2>Magic Numbers</h2>
+                    <p>Count from 1 to 10. Tap to spawn colorful bubbles, then tap them to pop and count!</p>
+                </div>
+                <div class="card-tag">Counting</div>
+            </a>
+
+            <a href="body.html" class="activity-card body-card">
+                <div class="card-icon">🧸</div>
+                <div class="card-body">
+                    <h2>Body Explorer</h2>
+                    <p>Tap a friendly teddy bear to learn body parts (Head, Tummy, Hands, Feet) with soft speech & chimes.</p>
+                </div>
+                <div class="card-tag">Body Parts</div>
+            </a>
+        </main>
+
+        <footer class="menu-footer">
+            <p>Parents: Press-and-hold the Parent Zone button below or press <strong>ESC</strong> to open settings & play timers.</p>
+        </footer>
+    </div>
+
+    <!-- Quick Floating Settings Trigger (requires holding down to prevent baby activation) -->
+    <button id="settingsTrigger" class="settings-trigger" aria-label="Open Settings" title="Hold to open parent settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="gear-icon"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span class="trigger-label">Parent Zone <span class="hold-text">(Hold)</span></span>
+        <div class="progress-ring"></div>
+    </button>
+
+    <!-- Live countdown badge (visible when timer is running) -->
+    <div id="countdownBadge" class="countdown-badge hidden"></div>
+
+    <!-- Playtime Over Lockout Overlay -->
+    <div id="timesUpOverlay" class="timesup-overlay hidden">
+        <div class="timesup-box">
+            <div class="timesup-icon">🌙</div>
+            <h2>Playtime is over!</h2>
+            <p>Great session! Ask a grown-up to unlock the screen.</p>
+            <button id="timesUpUnlockBtn" class="timesup-unlock-btn">Unlock (Parent)</button>
+        </div>
+    </div>
+
+    <!-- Frosted Glass Settings Drawer -->
+    <div id="settingsDrawer" class="settings-drawer hidden">
+        <div class="drawer-backdrop" id="drawerBackdrop"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h2>Parent Control Panel</h2>
+                <button id="closeDrawer" class="close-btn" aria-label="Close Settings">&times;</button>
+            </div>
+            
+            <div class="drawer-body">
+                <!-- Sound Options -->
+                <div class="settings-group">
+                    <h3>🎵 Sound Mode</h3>
+                    <div class="chips-group" id="soundPresets">
+                        <button class="chip active" data-sound="harp">Soft Harp</button>
+                        <button class="chip" data-sound="marimba">Wood Marimba</button>
+                        <button class="chip" data-sound="musicbox">Music Box</button>
+                        <button class="chip" data-sound="droplet">Water Droplets</button>
+                        <button class="chip" data-sound="silence">Mute</button>
+                    </div>
+                </div>
+
+                <!-- Color Themes -->
+                <div class="settings-group">
+                    <h3>Theme Palette</h3>
+                    <div class="theme-picker" id="themePicker">
+                        <button class="theme-circle active" data-theme="warm-sand" style="background: linear-gradient(135deg, #f4ebe1 0%, #e6d7c3 100%);" title="Warm Sand"></button>
+                        <button class="theme-circle" data-theme="soft-sage" style="background: linear-gradient(135deg, #e8f0e8 0%, #cedecd 100%);" title="Soft Sage"></button>
+                        <button class="theme-circle" data-theme="lavender-mist" style="background: linear-gradient(135deg, #eee8f3 0%, #d8cade 100%);" title="Lavender Mist"></button>
+                        <button class="theme-circle" data-theme="ocean-breeze" style="background: linear-gradient(135deg, #e7edf3 0%, #ccd7e6 100%);" title="Ocean Breeze"></button>
+                        <button class="theme-circle" data-theme="deep-night" style="background: linear-gradient(135deg, #1b212c 0%, #11151c 100%);" title="Deep Night"></button>
+                    </div>
+                </div>
+
+                <!-- Controls & Tuning -->
+                <div class="settings-group">
+                    <div class="control-row">
+                        <div class="control-label">
+                            <span>Audio Volume</span>
+                            <span id="volumeValue">50%</span>
+                        </div>
+                        <input type="range" id="volumeControl" min="0" max="100" value="50" class="slider">
+                    </div>
+                </div>
+
+                <!-- ⏱ Play Timer -->
+                <div class="settings-group">
+                    <h3>⏱ Play Timer</h3>
+                    <div class="timer-status" id="timerStatusRow">
+                        <span id="timerStatusLabel">No timer set</span>
+                        <button id="timerCancelBtn" class="chip timer-cancel-btn hidden">Cancel</button>
+                    </div>
+                    <div class="chips-group" id="timerPresets">
+                        <button class="chip" data-minutes="5">5 min</button>
+                        <button class="chip" data-minutes="10">10 min</button>
+                        <button class="chip" data-minutes="15">15 min</button>
+                        <button class="chip" data-minutes="30">30 min</button>
+                    </div>
+                    <div class="timer-custom-row">
+                        <input type="number" id="timerCustomInput" class="timer-custom-input" placeholder="Custom mins" min="1" max="120">
+                        <button id="timerCustomStart" class="chip">Start</button>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="settings-actions">
+                    <button id="fullscreenBtn" class="action-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        <span>Toggle Fullscreen</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="drawer-footer">
+                <p>Ensure your device volume is set to a safe, low level for young baby ears.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script imports -->
+    <script src="shared.js?v=3"></script>
+    <script src="menu.js?v=3"></script>
+</body>
+</html>
